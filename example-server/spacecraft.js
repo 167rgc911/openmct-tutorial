@@ -2,6 +2,8 @@
  Spacecraft.js simulates a small spacecraft generating telemetry.
 */
 
+var dgram = require('dgram');
+
 function Spacecraft() {
     this.state = {
         "prop.fuel": 77,
@@ -23,8 +25,25 @@ function Spacecraft() {
         this.generateTelemetry();
     }.bind(this), 1000);
 
+    const port = 8765;
+    const udpServer = dgram.createSocket('udp4');
+
     console.log("Example spacecraft launched!");
     console.log("Press Enter to toggle thruster state.");
+
+    udpServer.on('message', (msg, rinfo) => {
+        const telemetry = JSON.parse(msg);
+        this.state[telemetry.id] = telemetry.value;
+        console.log("    " + telemetry.id + ":" + telemetry.value);
+        this.generateTelemetry();
+    });
+
+    udpServer.on('listening', () => {
+        const server = udpServer.address();
+        console.log("UDP server listening on" + server.address + ":" + server.port);
+    });
+
+    udpServer.bind(port);
 
     process.stdin.on('data', function () {
         this.state['prop.thrusters'] =
