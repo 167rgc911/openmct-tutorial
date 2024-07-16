@@ -17,12 +17,28 @@
             openmct.time.timeSystem('utc');
             openmct.install(openmct.plugins.Espresso());
     
+            openmct.install(openmct.plugins.TelemetryMean());
+            openmct.install(openmct.plugins.SummaryWidget());
+            openmct.install(openmct.plugins.Notebook());
+            openmct.install(openmct.plugins.LADTable());
+            openmct.install(openmct.plugins.FaultManagement());
+            openmct.install(openmct.plugins.Clock());
+            openmct.install(openmct.plugins.LocalTimeSystem());
+            openmct.install(openmct.plugins.Timer());
+            openmct.install(openmct.plugins.Timeline());
+            openmct.install(openmct.plugins.Timelist());
+
             openmct.install(DictionaryPlugin());
             openmct.install(HistoricalTelemetryPlugin());
             openmct.install(RealtimeTelemetryPlugin());
     
             openmct.start();
         });
+
+        var test_indicator = openmct.indicators.simpleIndicator();
+        test_indicator.text("testing");
+        test_indicator.iconClass("icon-people");
+        openmct.indicators.add(test_indicator);
     </script>
 </head>
 <body>
